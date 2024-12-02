@@ -29,4 +29,7 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+	<modules>
+		<module>spring-boot-app-module</module>
+	</modules>
 </project>
