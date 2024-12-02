@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog logicalFilePath="db.changelog-1.0.xml"
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+	<changeSet id="initial schema" author="salex">
+		<!-- client -->
+		<createTable tableName="clients">
+			<column name="id" type="BIGINT">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="version" type="BIGINT" />
+		</createTable>
+
+		<!-- account -->
+		<createTable tableName="accounts">
+			<column name="id" type="BIGINT">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="client_id" type="BIGINT">
+				<constraints nullable="false"
+					foreignKeyName="fk_account_client"
+					references="clients(id)" />
+			</column>
+			<column name="active" type="BOOL">
+				<constraints nullable="false" />
+			</column>
+			<column name="amount" type="DOUBLE" />
+			<column name="version" type="BIGINT" />
+		</createTable>
+	</changeSet>
+
+	<changeSet id="initial data" author="salex">
+		<sql>INSERT INTO clients (id, "name", version)
+			VALUES
+			(1, 'User_1', 0);
+		</sql>
+		<sql>INSERT INTO accounts (id, client_id, active, amount, version)
+			VALUES
+			(1, 1, true, 1000, 0),
+			(2, 1, true, 0, 0);
+		</sql>
+	</changeSet>
+
+</databaseChangeLog>
