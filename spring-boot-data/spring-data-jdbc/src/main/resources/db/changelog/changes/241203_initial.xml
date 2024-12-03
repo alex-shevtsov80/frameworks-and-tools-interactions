@@ -10,7 +10,7 @@
 			<column name="id" type="BIGINT">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="name" type="VARCHAR(255)">
+			<column name="first_name" type="VARCHAR(255)">
 				<constraints nullable="false" />
 			</column>
 			<column name="version" type="BIGINT" />
@@ -35,14 +35,19 @@
 	</changeSet>
 
 	<changeSet id="initial data" author="salex">
-		<sql>INSERT INTO clients (id, "name", version)
+		<sql>INSERT INTO clients (id, first_name, version)
 			VALUES
-			(1, 'User_1', 0);
+			(1, 'User_1', 0),
+			(2, 'User_2', 0);
 		</sql>
 		<sql>INSERT INTO accounts (id, client_id, active, amount, version)
 			VALUES
 			(1, 1, true, 1000, 0),
-			(2, 1, true, 0, 0);
+			(2, 1, true, 0, 0),
+			(3, 2, true, 1000, 0),
+			(4, 2, true, 0, 0),
+			(5, 2, true, 1000, 0),
+			(6, 2, true, 0, 0);
 		</sql>
 	</changeSet>
 

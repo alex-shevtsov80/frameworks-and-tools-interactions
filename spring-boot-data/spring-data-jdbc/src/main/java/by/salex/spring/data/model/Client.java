@@ -1,4 +1,4 @@
-package by.salex.spring.data.entity;
+package by.salex.spring.data.model;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -8,18 +8,14 @@ import org.springframework.data.annotation.Version;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
-@Table(name = "accounts")
-public class Account implements Serializable {
-    private static final long serialVersionUID = -6046625404945139718L;
-    
+@Table(name = "clients")
+public class Client implements Serializable {
+    private static final long serialVersionUID = -2801100913077649324L;
+
     @Id
     private Long id;
-    @Column("client_id")
-    private Long clientId;
-    @Column("active")
-    private Boolean active;
-    @Column("amount")
-    private Double amount;
+    @Column("first_name")
+    private String name;
     @Version
     private Long version;
 
@@ -31,28 +27,12 @@ public class Account implements Serializable {
         this.id = id;
     }
 
-    public Long getClientId() {
-        return clientId;
+    public String getName() {
+        return name;
     }
 
-    public void setClientId(Long clientId) {
-        this.clientId = clientId;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-
-    public Double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Double amount) {
-        this.amount = amount;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Long getVersion() {
@@ -76,7 +56,8 @@ public class Account implements Serializable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Account other = (Account) obj;
+        Client other = (Client) obj;
         return Objects.equals(id, other.id);
     }
+
 }
