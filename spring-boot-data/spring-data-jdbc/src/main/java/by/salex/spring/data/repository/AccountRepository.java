@@ -7,5 +7,4 @@ import by.salex.spring.data.model.Account;
 
 @Repository
 public interface AccountRepository extends CrudRepository<Account, Long> {
-
 }
