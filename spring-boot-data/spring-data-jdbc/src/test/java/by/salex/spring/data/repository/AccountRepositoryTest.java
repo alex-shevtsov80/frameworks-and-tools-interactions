@@ -23,10 +23,12 @@ public class AccountRepositoryTest extends BaseRepositoryTest {
     public void updateAmountWhereVersionIsCorrectTest() {
         Account account = accountRepository.findById(1L).orElseThrow(() -> new IllegalArgumentException());
         Double expectedAmount = account.getAmount() + 1;
+        Long expectedVersion = account.getVersion() + 1;
         account.setAmount(expectedAmount);
-        assertTrue(accountRepository.updateAmountWhereVersionIsCorrect(account.getId(), account.getAmount(),
-                account.getVersion()));
+        assertTrue(accountRepository.updateAmount(account.getId(), account.getAmount(), account.getVersion(),
+                account.getVersion() + 1));
         account = accountRepository.findById(1L).orElseThrow(() -> new IllegalArgumentException());
         assertEquals(expectedAmount, account.getAmount());
+        assertEquals(expectedVersion, account.getVersion());
     }
 }

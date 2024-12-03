@@ -2,7 +2,6 @@ package by.salex.spring.data.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import by.salex.spring.data.model.Account;
 import by.salex.spring.data.repository.AccountRepository;
@@ -13,17 +12,18 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private AccountRepository accountRepository;
 
-    @Transactional
+    @Override
+    public Account getById(Long id) {
+        return accountRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(String.format("User(%s) not found", id)));
+    }
+
     @Override
     public Account updateAmount(Long id, Double amount) {
-        Account account = accountRepository.findById(id).orElse(null);
-        if (account != null) {
-            account.setAmount(amount);
-            if (accountRepository.updateAmountWhereVersionIsCorrect(account.getId(), amount, account.getVersion())) {
-                account.setVersion(account.getVersion() + 1);
-                account = accountRepository.save(account);
-            }
+        Account account = getById(id);
+        if (!accountRepository.updateAmount(account.getId(), amount, account.getVersion(), account.getVersion() + 1)) {
+            throw new RuntimeException("Optimistic lock exception");
         }
-        return account;
+        return getById(id);
     }
 }
