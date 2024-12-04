@@ -7,9 +7,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.transaction.annotation.Transactional;
 
 import by.salex.spring.data.model.ClientWithFullAmount;
 
+@Transactional(readOnly = true)
 public class ClientRepositoryCustomImpl implements ClientRepositoryCustom {
     @Autowired
     private JdbcTemplate template;
