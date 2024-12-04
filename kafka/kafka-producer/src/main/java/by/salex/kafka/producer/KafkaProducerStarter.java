@@ -14,8 +14,6 @@ import by.salex.kafka.common.PropertiesProvider;
 public class KafkaProducerStarter {
     private static final Logger LOGGER = LoggerFactory.getLogger(KafkaProducerStarter.class);
 
-    private static final int DEFAULT_BATCH_SIZE = 10;
-
     public static void main(String[] args) throws IOException {
         LOGGER.info("Starting producer...");
         // load properties
@@ -28,7 +26,7 @@ public class KafkaProducerStarter {
             sendSingleSimpleMessage(producer, topic, "java producer online!");
 
             // callback test message
-            sendMessage(producer, topic, "[%s] callback test.".formatted(System.currentTimeMillis()), true,
+            sendMessage(producer, topic, null, "[%s] callback test.".formatted(System.currentTimeMillis()), true,
                     (metadata, exception) -> {
                         if (exception == null) {
                             StringBuilder callbackResult = new StringBuilder("\nMetadata received: \n");
@@ -47,24 +45,19 @@ public class KafkaProducerStarter {
             if (messagesCount != null) {
                 int mc = Integer.valueOf(messagesCount);
                 for (int i = 0; i < mc; i++) {
-                    sendMessage(producer, topic, "[%s] batch messages test.".formatted(i), true,
+                    String key = "key_" + i % 10;
+                    sendMessage(producer, topic, key,
+                            "[%s - %s] batch messages test.".formatted(System.currentTimeMillis(), key), true,
                             (metadata, exception) -> {
                                 if (exception == null) {
                                     StringBuilder callbackResult = new StringBuilder("\nMetadata received: \n");
-                                    callbackResult.append("Topic: ").append(metadata.topic()).append("\n");
+                                    callbackResult.append("Key: ").append(key).append(" ");
                                     callbackResult.append("Partition: ").append(metadata.partition()).append("\n");
-                                    callbackResult.append("Offset: ").append(metadata.offset()).append("\n");
-                                    callbackResult.append("Timestamp: ").append(metadata.timestamp()).append("\n");
                                     LOGGER.info(callbackResult.toString());
                                 } else {
                                     LOGGER.error(exception.getMessage());
                                 }
                             });
-//                    try {
-//                        Thread.sleep(100);
-//                    } catch (InterruptedException e) {
-//                        LOGGER.error(e.getMessage());
-//                    }
                 }
                 producer.flush();
             }
@@ -73,7 +66,7 @@ public class KafkaProducerStarter {
         LOGGER.info("Bye bye!");
     }
 
-    private static void sendMessage(KafkaProducer<String, String> producer, String topic, String message,
+    private static void sendMessage(KafkaProducer<String, String> producer, String topic, String key, String message,
             boolean useFlash, Callback callback) {
         ProducerRecord<String, String> record = new ProducerRecord<String, String>(topic, message);
         producer.send(record, callback);
@@ -83,6 +76,6 @@ public class KafkaProducerStarter {
     }
 
     private static void sendSingleSimpleMessage(KafkaProducer<String, String> producer, String topic, String message) {
-        sendMessage(producer, topic, message, true, null);
+        sendMessage(producer, topic, null, message, true, null);
     }
 }
