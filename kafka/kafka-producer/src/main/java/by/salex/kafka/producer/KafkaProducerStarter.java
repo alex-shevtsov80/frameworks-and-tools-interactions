@@ -68,7 +68,12 @@ public class KafkaProducerStarter {
 
     private static void sendMessage(KafkaProducer<String, String> producer, String topic, String key, String message,
             boolean useFlash, Callback callback) {
-        ProducerRecord<String, String> record = new ProducerRecord<String, String>(topic, message);
+        ProducerRecord<String, String> record = null;
+        if (key != null) {
+            record = new ProducerRecord<String, String>(topic, key, message);
+        } else {
+            record = new ProducerRecord<String, String>(topic, message);
+        }
         producer.send(record, callback);
         if (useFlash) {
             producer.flush();
