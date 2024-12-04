@@ -26,7 +26,7 @@ public class KafkaProducerStarter {
             sendSingleSimpleMessage(producer, topic, "java producer online!");
 
             // callback test message
-            sendMessage(producer, topic, null, "[%s] callback test.".formatted(System.currentTimeMillis()), true,
+            sendMessage(producer, topic, null, "[%s] callback.".formatted(System.currentTimeMillis()), true,
                     (metadata, exception) -> {
                         if (exception == null) {
                             StringBuilder callbackResult = new StringBuilder("\nMetadata received: \n");
@@ -46,18 +46,22 @@ public class KafkaProducerStarter {
                 int mc = Integer.valueOf(messagesCount);
                 for (int i = 0; i < mc; i++) {
                     String key = "key_" + i % 10;
-                    sendMessage(producer, topic, key,
-                            "[%s - %s] batch messages test.".formatted(System.currentTimeMillis(), key), true,
-                            (metadata, exception) -> {
-                                if (exception == null) {
-                                    StringBuilder callbackResult = new StringBuilder("\nMetadata received: \n");
-                                    callbackResult.append("Key: ").append(key).append(" ");
-                                    callbackResult.append("Partition: ").append(metadata.partition()).append("\n");
-                                    LOGGER.info(callbackResult.toString());
-                                } else {
-                                    LOGGER.error(exception.getMessage());
-                                }
-                            });
+                    String message = null;
+                    if (mc - 1 == i) {
+                        message = "stop";
+                    } else {
+                        message = "[%s - %s] message %s.".formatted(System.currentTimeMillis(), key, i);
+                    }
+                    sendMessage(producer, topic, key, message, true, (metadata, exception) -> {
+                        if (exception == null) {
+                            StringBuilder callbackResult = new StringBuilder("\nMetadata received: \n");
+                            callbackResult.append("Key: ").append(key).append(" ");
+                            callbackResult.append("Partition: ").append(metadata.partition()).append("\n");
+                            LOGGER.info(callbackResult.toString());
+                        } else {
+                            LOGGER.error(exception.getMessage());
+                        }
+                    });
                 }
                 producer.flush();
             }
