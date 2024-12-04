@@ -30,7 +30,6 @@ public class KafkaConsumerStarter {
                 consumer.subscribe(List.of(topic));
                 boolean isStop = false;
                 while (!isStop) {
-                    LOGGER.info("Polling...");
                     ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(1));
                     for (ConsumerRecord<String, String> record : records) {
                         isStop = "stop".equals(record.value().toLowerCase());
