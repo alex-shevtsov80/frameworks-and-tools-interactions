@@ -26,7 +26,7 @@ public class KafkaProducerStarter {
             sendSingleSimpleMessage(producer, topic, "java producer online!");
 
             // callback test message
-            sendMessage(producer, topic, null, "[%s] callback test.".formatted(System.currentTimeMillis()), true,
+            sendMessage(producer, topic, null, "[%s] callback.".formatted(System.currentTimeMillis()), true,
                     (metadata, exception) -> {
                         if (exception == null) {
                             StringBuilder callbackResult = new StringBuilder("\nMetadata received: \n");
@@ -50,7 +50,7 @@ public class KafkaProducerStarter {
                     if (mc - 1 == i) {
                         message = "stop";
                     } else {
-                        message = "[%s - %s] batch messages test.".formatted(System.currentTimeMillis(), key);
+                        message = "[%s - %s] message %s.".formatted(System.currentTimeMillis(), key, i);
                     }
                     sendMessage(producer, topic, key, message, true, (metadata, exception) -> {
                         if (exception == null) {
