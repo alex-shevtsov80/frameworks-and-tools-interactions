@@ -24,10 +24,12 @@ public class KafkaConsumerStarter {
 
         try (KafkaConsumer<String, String> consumer = new KafkaConsumer<String, String>(properties)) {
             consumer.subscribe(List.of(topic));
-            while (true) {
+            boolean isStop = false;
+            while (!isStop) {
                 LOGGER.info("Polling...");
                 ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(1));
                 for (ConsumerRecord<String, String> record : records) {
+                    isStop = "stop".equals(record.value().toLowerCase());
                     LOGGER.info("Partition=%s, Offset=%s, Key=%s, Value=%s".formatted(record.partition(),
                             record.offset(), record.key(), record.value()));
                 }
