@@ -9,15 +9,14 @@ public class PropertiesProvider {
     private PropertiesProvider() {
     }
 
-    public static KafkaProperties fromResource() throws IOException {
+    public static Properties fromResource() throws IOException {
         return fromResource(DEFAULT_RESOURCE_NAME);
     }
 
-    public static KafkaProperties fromResource(String resourceName) throws IOException {
+    public static Properties fromResource(String resourceName) throws IOException {
         Properties properties = new Properties();
         ClassLoader classLoader = PropertiesProvider.class.getClassLoader();
         properties.load(classLoader.getResourceAsStream(resourceName));
-        KafkaProperties kafkaProperties = new SimpleKafkaProperties(properties);
-        return kafkaProperties;
+        return properties;
     }
 }
