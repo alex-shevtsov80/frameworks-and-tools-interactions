@@ -2,6 +2,7 @@ package by.salex.spring.data.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import by.salex.spring.data.model.Account;
 import by.salex.spring.data.repository.AccountRepository;
@@ -18,6 +19,7 @@ public class AccountServiceImpl implements AccountService {
                 .orElseThrow(() -> new IllegalArgumentException(String.format("User(%s) not found", id)));
     }
 
+    @Transactional
     @Override
     public Account updateAmount(Long id, Double amount) {
         Account account = getById(id);
