@@ -47,5 +47,6 @@
 	</build>
 	<modules>
 		<module>spring-data-jdbc</module>
+		<module>spring-boot-jpa</module>
 	</modules>
 </project>

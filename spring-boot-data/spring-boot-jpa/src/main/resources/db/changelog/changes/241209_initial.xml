@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog logicalFilePath="db.changelog-1.0.xml"
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+	<changeSet id="initial schema" author="salex">
+		<!-- client -->
+		<createTable tableName="clients">
+			<column name="id" type="BIGINT">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="first_name" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="version" type="BIGINT" />
+		</createTable>
+
+		<!-- account -->
+		<createTable tableName="accounts">
+			<column name="id" type="BIGINT">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="client_id" type="BIGINT">
+				<constraints nullable="false"
+					foreignKeyName="fk_account_client"
+					references="clients(id)" />
+			</column>
+			<column name="active" type="BOOL">
+				<constraints nullable="false" />
+			</column>
+			<column name="amount" type="DOUBLE" />
+			<column name="version" type="BIGINT" />
+		</createTable>
+	</changeSet>
+
+	<changeSet id="initial data" author="salex">
+		<sql>INSERT INTO clients (id, first_name, version)
+			VALUES
+			(1, 'User_1', 0),
+			(2, 'User_2', 0),
+      (3, 'User_3', 0),
+      (4, 'User_4', 0),
+      (5, 'User_5', 0);
+		</sql>
+		<sql>INSERT INTO accounts (id, client_id, active, amount, version)
+			VALUES
+			(1, 1, true, 1000, 0),
+			(2, 1, false, 0, 0),
+			(3, 2, true, 1000, 0),
+			(4, 2, false, 0, 0),
+			(5, 2, true, 1000, 0),
+			(6, 2, false, 0, 0),
+      (7, 2, true, 1000, 0),
+      (8, 3, true, 500, 0),
+      (9, 3, true, 1000, 0),
+      (10, 4, true, 250, 0),
+      (11, 4, true, 1000, 0),
+      (12, 4, true, 200, 0),
+      (13, 4, true, 1000, 0),
+      (14, 5, true, 300, 0),
+      (15, 5, true, 1000, 0),
+      (16, 5, true, 500, 0),
+      (17, 5, true, 1000, 0),
+      (18, 1, true, 100, 0),
+      (19, 1, true, 1000, 0),
+      (20, 1, true, 200, 0);
+		</sql>
+	</changeSet>
+
+</databaseChangeLog>
