@@ -3,21 +3,21 @@ package by.salex.spring.data.model;
 import java.io.Serializable;
 import java.util.Objects;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Version;
+import org.hibernate.annotations.OptimisticLockType;
+import org.hibernate.annotations.OptimisticLocking;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Version;
 
 @Entity(name = "accounts")
+@OptimisticLocking(type = OptimisticLockType.VERSION)
 public class Account implements Serializable {
     private static final long serialVersionUID = -6046625404945139718L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id;    
     @Column(name = "client_id")
     private Long clientId;
     @Column(name = "active")
@@ -63,10 +63,6 @@ public class Account implements Serializable {
         return version;
     }
 
-    public void setVersion(Long version) {
-        this.version = version;
-    }
-
     @Override
     public int hashCode() {
         return Objects.hash(id);
@@ -83,4 +79,10 @@ public class Account implements Serializable {
         Account other = (Account) obj;
         return Objects.equals(id, other.id);
     }
+
+    @Override
+    public String toString() {
+        return "Account [amount=" + amount + ", version=" + version + "]";
+    }
+
 }

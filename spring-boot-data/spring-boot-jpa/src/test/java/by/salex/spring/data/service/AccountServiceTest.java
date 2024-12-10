@@ -44,4 +44,32 @@ public class AccountServiceTest {
         executorService.shutdown();
         executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
     }
+
+    @Test
+    public void transferPessimisticTest() throws InterruptedException {
+        ExecutorService executorService = Executors.newFixedThreadPool(3);
+        executorService.execute(() -> {
+            try {
+                accountService.transferPessimistic(1L, 2L, 100);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        executorService.execute(() -> {
+            try {
+                accountService.transferPessimistic(1L, 2L, 100);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        executorService.execute(() -> {
+            try {
+                accountService.transferPessimistic(1L, 2L, 100);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        executorService.shutdown();
+        executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
+    }
 }
